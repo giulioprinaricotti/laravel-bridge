@@ -18,6 +18,8 @@ use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Queue\Failed\FailedJobProviderInterface;
 
+use Aws\Token\Token;
+
 class BrefServiceProvider extends ServiceProvider
 {
     /**
@@ -47,7 +49,7 @@ class BrefServiceProvider extends ServiceProvider
 
         Config::set('cache.stores.dynamodb.token', env('AWS_SESSION_TOKEN'));
         Config::set('filesystems.disks.s3.token', env('AWS_SESSION_TOKEN'));
-        Config::set('queue.connections.sqs.token', env('AWS_SESSION_TOKEN'));
+        Config::set('queue.connections.sqs.token', new Token(env('AWS_SESSION_TOKEN')));
         Config::set('services.ses.token', env('AWS_SESSION_TOKEN'));
 
         $this->app->when(QueueHandler::class)
